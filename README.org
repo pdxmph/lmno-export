@@ -19,6 +19,20 @@ lmno-export lets you author your [[https://lmno.lol][lmno.lol]] blog in org-mode
 
 It'll open your Markdown output file for review and upload. (The author uses the proxy icon for drag-n-drop into lmno.lol's uploader.)
 
+* Take advantage of org-capture
+
+#+begin_src emacs-lisp
+(add-to-list 'org-capture-templates
+  '("l"
+    "LMNO blog post"
+    entry
+    (file lmno-org-input-file)
+    "* [%<%Y-%m-%d>] %?\n\n"
+    :prepend t))
+#+end_src
+
+
+
 * Under the hood
 
 Uses =org-export= with a lot of options turned off to make it as clean as possible, and then takes a pass to remove extraneous anchor tags and datestamp spans.
