@@ -1,0 +1,44 @@
+#+title: Readme
+
+* Description
+
+lmno-export lets you author your [[https://lmno.lol][lmno.lol]] blog in org-mode then export it to clean Markdown for upload.
+
+
+* Configuration
+
+#+begin_src emacs-lisp
+(require 'lmno-export)
+(setq lmno-org-input-file  (expand-file-name "~/blog/lmno_posts.org")
+      lmno-org-output-file (expand-file-name "~/blog/lmno.md"))
+#+end_src
+
+* Usage
+
+=lmno-org-export-blog=
+
+It'll open your Markdown output file for review and upload. (The author uses the proxy icon for drag-n-drop into lmno.lol's uploader.)
+
+* Under the hood
+
+Uses =org-export= with a lot of options turned off to make it as clean as possible, and then takes a pass to remove extraneous anchor tags and datestamp spans.
+
+* Use with a pre-existing lmno.md file
+
+To export my existing =lmno.md= file, I used:
+
+=pandoc --from=gfm --to=org --wrap=none ~/blog/lmno.md -o ~/blog/lmno.org=
+
+That produced a pretty clean org-mode file.
+
+* Helpful custom org-mode link for images
+
+lmno doesn't provide support for image storage/upload. Put your image somewhere, get its URL, and link to it with this =img= link type and get Markdown with the link description as the =alt= tag when you export:
+
+#+begin_src emacs-lisp
+(org-add-link-type
+ "img" nil
+ (lambda (path desc backend)
+   (when (org-export-derived-backend-p backend 'md)
+     (format "![%s](%s)" desc path))))
+#+end_src
